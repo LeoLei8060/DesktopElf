@@ -6,26 +6,30 @@ import DesktopElf 1.0
 
 ApplicationWindow {
     id: mainWindow
-    
+
     // Window properties
     width: 150
     height: 150
     visible: true  // Ensure window is visible
-    flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool
+    flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     color: "transparent"
-    
+
+    // Additional window properties for better visibility
+    modality: Qt.NonModal
+    title: "Desktop Elf"
+
     // Make window draggable
     property bool isDragging: false
     property point dragStartPosition
-    
+
     // References to other windows
     property var settingsWindow: null
     property var fitnessWindow: null
-    
+
     // Window positioning
     x: spriteController.position.x
     y: spriteController.position.y
-    
+
     // Update window position when sprite position changes
     Connections {
         target: spriteController
@@ -34,13 +38,21 @@ ApplicationWindow {
             mainWindow.y = spriteController.position.y
         }
     }
-    
+
     // Main sprite display
     Rectangle {
         id: spriteContainer
         anchors.fill: parent
         color: "transparent"
-        
+
+        // Smooth scale animation
+        Behavior on scale {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.OutQuad
+            }
+        }
+
         // Sprite image
         AnimatedImage {
             id: spriteImage
@@ -50,7 +62,7 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
             source: spriteController.currentImagePath
             playing: true
-            
+
             // Handle static images
             onStatusChanged: {
                 if (status === Image.Error) {
@@ -58,7 +70,7 @@ ApplicationWindow {
                 }
             }
         }
-        
+
         // Fallback for static images when AnimatedImage fails
         Image {
             id: staticImage
@@ -69,7 +81,7 @@ ApplicationWindow {
             source: spriteImage.status === Image.Error ? spriteController.currentImagePath : ""
             visible: spriteImage.status === Image.Error
         }
-        
+
         // Glow effect for sprite
         DropShadow {
             anchors.fill: spriteImage
@@ -81,62 +93,24 @@ ApplicationWindow {
             verticalOffset: 2
             z: -1  // Place behind the sprite
         }
-        
+
         MouseArea {
             id: mouseArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            
-            property bool isDragging: false
-            property point lastMousePos
-            property bool wasClick: false
-            
-            onPressed: {
-                if (mouse.button === Qt.LeftButton) {
-                    isDragging = false
-                    wasClick = true
-                    lastMousePos = Qt.point(mouse.x, mouse.y)
-                }
+
+            property point lastPos: Qt.point(0, 0)
+
+            onPressed: (mouse) => {
+                lastPos = Qt.point(mouse.x, mouse.y)
             }
-            
-            onPositionChanged: {
-                if (mouse.button === Qt.LeftButton && pressed) {
-                    var deltaX = Math.abs(mouse.x - lastMousePos.x)
-                    var deltaY = Math.abs(mouse.y - lastMousePos.y)
-                    
-                    // If mouse moved more than 5 pixels, it's a drag
-                    if (deltaX > 5 || deltaY > 5) {
-                        isDragging = true
-                        wasClick = false
-                        
-                        var newX = mainWindow.x + (mouse.x - lastMousePos.x)
-                        var newY = mainWindow.y + (mouse.y - lastMousePos.y)
-                        
-                        // Keep window within screen bounds
-                        newX = Math.max(0, Math.min(newX, Screen.width - mainWindow.width))
-                        newY = Math.max(0, Math.min(newY, Screen.height - mainWindow.height))
-                        
-                        mainWindow.x = newX
-                        mainWindow.y = newY
-                        
-                        // Update sprite controller position
-                        spriteController.setPosition(Qt.point(newX, newY))
-                    }
-                }
+
+            onPositionChanged: (mouse) => {
+                var delta = Qt.point(mouse.x - lastPos.x, mouse.y - lastPos.y)
+                mainWindow.x += delta.x
+                mainWindow.y += delta.y
             }
-            
-            onReleased: {
-                if (mouse.button === Qt.LeftButton) {
-                    if (wasClick && !isDragging) {
-                        // Left click without drag - trigger jump
-                        spriteController.startJumpAnimation()
-                        jumpAnimation.start()
-                    }
-                    isDragging = false
-                    wasClick = false
-                }
-            }
-            
+
             onClicked: {
                 if (mouse.button === Qt.RightButton) {
                     contextMenu.popup()
@@ -144,28 +118,28 @@ ApplicationWindow {
             }
         }
     }
-    
+
     // Context menu
     ContextMenu {
         id: contextMenu
-        
+
         onSettingsRequested: {
             showSettingsWindow()
         }
-        
+
         onFitnessRequested: {
             showFitnessWindow()
         }
-        
+
         onHideRequested: {
             mainWindow.hide()
         }
-        
+
         onExitRequested: {
             Qt.quit()
         }
     }
-    
+
     // Functions
     function showSettingsWindow() {
         if (!settingsWindow) {
@@ -181,7 +155,7 @@ ApplicationWindow {
             settingsWindow.raise()
         }
     }
-    
+
     function showFitnessWindow() {
         if (!fitnessWindow) {
             var component = Qt.createComponent("FitnessCalendar.qml")
@@ -196,12 +170,12 @@ ApplicationWindow {
             fitnessWindow.raise()
         }
     }
-    
+
     // Animation effects
     SequentialAnimation {
         id: jumpEffect
         running: spriteController.isAnimating
-        
+
         ParallelAnimation {
             NumberAnimation {
                 target: spriteContainer
@@ -220,7 +194,7 @@ ApplicationWindow {
                 easing.type: Easing.OutQuad
             }
         }
-        
+
         ParallelAnimation {
             NumberAnimation {
                 target: spriteContainer
@@ -240,7 +214,7 @@ ApplicationWindow {
             }
         }
     }
-    
+
     // Window state management
     onVisibilityChanged: {
         console.log("Window visibility changed to:", visibility)
@@ -251,29 +225,29 @@ ApplicationWindow {
             console.log("Desktop elf visible")
         }
     }
-    
+
     onXChanged: console.log("Window X position changed to:", x)
     onYChanged: console.log("Window Y position changed to:", y)
-    
+
     Component.onCompleted: {
         console.log("Desktop elf main window loaded")
         console.log("Initial sprite position:", spriteController.position)
         console.log("Screen size:", Screen.width, "x", Screen.height)
-        
+
         // Ensure window is positioned within screen bounds
         var posX = spriteController.position.x
         var posY = spriteController.position.y
-        
+
         // Clamp position to screen bounds
         posX = Math.max(0, Math.min(posX, Screen.width - width))
         posY = Math.max(0, Math.min(posY, Screen.height - height))
-        
+
         x = posX
         y = posY
-        
+
         console.log("Window positioned at:", x, y)
         console.log("Window visible:", visible)
-        
+
         // Explicitly show the window
         show()
     }

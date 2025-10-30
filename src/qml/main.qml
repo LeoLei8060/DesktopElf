@@ -25,6 +25,7 @@ ApplicationWindow {
     // References to other windows
     property var settingsWindow: null
     property var fitnessWindow: null
+    property var fitnessWindow2: null
 
     // Window positioning
     x: spriteController.position.x
@@ -157,17 +158,29 @@ ApplicationWindow {
     }
 
     function showFitnessWindow() {
-        if (!fitnessWindow) {
+        console.log("Attempting to show fitness window...")
+        if (!fitnessWindow2) {
+            console.log("Creating new fitness window...")
             var component = Qt.createComponent("FitnessCalendar.qml")
             if (component.status === Component.Ready) {
-                fitnessWindow = component.createObject(mainWindow)
-                fitnessWindow.show()
+                // 创建为独立窗口，不设置父对象
+                fitnessWindow2 = component.createObject(null)
+                if (fitnessWindow2) {
+                    console.log("Fitness window created successfully")
+                    // 不调用 show()，让 visibility: Window.FullScreen 生效
+                    fitnessWindow2.raise()
+                    fitnessWindow2.requestActivate()
+                } else {
+                    console.log("Failed to create fitness window object")
+                }
             } else {
                 console.log("Error creating fitness window:", component.errorString())
             }
         } else {
-            fitnessWindow.show()
-            fitnessWindow.raise()
+            console.log("Showing existing fitness window...")
+            fitnessWindow2.show()
+            fitnessWindow2.raise()
+            fitnessWindow2.requestActivate()
         }
     }
 

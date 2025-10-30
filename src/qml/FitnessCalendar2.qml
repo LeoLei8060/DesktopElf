@@ -9,36 +9,43 @@ Window {
     id: root
     visible: true
     visibility: Window.FullScreen
-    flags: Qt.FramelessWindowHint | Qt.WindowStaysOnBottomHint/*Qt.Window*/
+    flags: Qt.Window
     color: "transparent"
 
+    // 当前日期信息
     property date currentDate: new Date()
     property int currentYear: currentDate.getFullYear()
     property int currentMonth: currentDate.getMonth()
 
+    // 获取当月天数
     function getDaysInMonth(year, month) {
         return new Date(year, month + 1, 0).getDate()
     }
 
+    // 获取当月第一天是星期几 (0=周日, 1=周一, ...)
     function getFirstDayOfMonth(year, month) {
         var firstDay = new Date(year, month, 1).getDay()
-        return firstDay === 0 ? 6 : firstDay - 1
+        return firstDay === 0 ? 6 : firstDay - 1 // 转换为周一为0
     }
 
+    // 半透明背景
     Rectangle {
         anchors.fill: parent
         color: "#CC000000"
         opacity: 0.85
-        MouseArea { anchors.fill: parent; onClicked: root.close() }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: root.close()
+        }
     }
 
-    // 主面板
+    // 主容器
     Rectangle {
-        id: panel
         anchors.fill: parent
-        anchors.margins: 0
+        anchors.margins: 40
         color: "#F0F5F9"
-        radius: 20
+        radius: 15
 
         ColumnLayout {
             anchors.fill: parent
@@ -58,7 +65,7 @@ Window {
 
                     Text {
                         text: currentYear + "年" + (currentMonth + 1) + "月"
-                        font.pixelSize: 24
+                        font.pixelSize: 20
                         font.bold: true
                         color: "white"
                     }
@@ -73,32 +80,29 @@ Window {
                 }
             }
 
-            // 日历网格（等宽全屏）
-            Grid {
-                id: grid
+            // 日历网格
+            GridLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 columns: 7
                 rowSpacing: 8
                 columnSpacing: 8
+                Layout.minimumHeight: parent.height - 100
 
-                property real cellWidth: (width - columnSpacing * (columns - 1)) / columns
-                property real cellHeight: (height - rowSpacing * (6 - 1)) / 6
-
-                // 星期标题
+                // 第一行：星期标题
                 Repeater {
                     model: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
 
                     Rectangle {
-                        width: grid.cellWidth
-                        height: 40
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 40
                         color: "#4A7BA7"
-                        radius: 6
+                        radius: 5
 
                         Text {
                             anchors.centerIn: parent
                             text: modelData
-                            font.pixelSize: 14
+                            font.pixelSize: 12
                             font.bold: true
                             color: "white"
                         }
@@ -107,25 +111,28 @@ Window {
 
                 // 日期方块
                 Repeater {
-                    model: 42
+                    model: 42 // 6行 x 7列
+
                     delegate: dayCellComponent
                 }
             }
         }
     }
 
-    // 日期单元格
+    // 日期单元格组件
     Component {
         id: dayCellComponent
 
         Rectangle {
             id: dayCell
-            width: grid.cellWidth
-            height: grid.cellHeight
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
             property int cellIndex: index
             property int firstDay: getFirstDayOfMonth(currentYear, currentMonth)
             property int daysInMonth: getDaysInMonth(currentYear, currentMonth)
             property int dayNumber: cellIndex - firstDay + 1
+            property int dayText: (dayNumber > 0 && dayNumber <= daysInMonth) ? dayNumber : 0
             property bool isValid: dayNumber > 0 && dayNumber <= daysInMonth
 
             color: isValid ? "white" : "#E8E8E8"
@@ -137,34 +144,38 @@ Window {
                 anchors.fill: parent
                 anchors.margins: 6
                 spacing: 3
-                visible: isValid
+                visible: dayCell.isValid
 
+                // 日期标题
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 24
+                    Layout.preferredHeight: 22
                     color: "#F0F0F0"
                     radius: 4
 
                     Text {
                         anchors.centerIn: parent
-                        text: dayCell.dayNumber
+                        text: dayCell.dayText
                         font.pixelSize: 13
                         font.bold: true
                         color: "#2E5090"
                     }
                 }
 
+                // 待办事项列表（包含添加按钮）
                 ScrollView {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    Layout.minimumHeight: 150
                     clip: true
                     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                     ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
                     ColumnLayout {
                         width: parent.width
-                        spacing: 2
+                        spacing: 1
 
+                        // 待办事项列表
                         Repeater {
                             id: todoRepeater
                             model: ListModel { id: todoModel }
@@ -176,14 +187,16 @@ Window {
 
                                 RowLayout {
                                     anchors.fill: parent
-                                    spacing: 4
+                                    spacing: 3
 
                                     CheckBox {
                                         id: checkbox
                                         checked: model.completed
                                         Layout.preferredWidth: 18
                                         Layout.preferredHeight: 18
-                                        onCheckedChanged: todoModel.setProperty(index, "completed", checked)
+                                        onCheckedChanged: {
+                                            todoModel.setProperty(index, "completed", checked)
+                                        }
                                     }
 
                                     Rectangle {
@@ -195,19 +208,26 @@ Window {
                                         TextInput {
                                             id: textInput
                                             anchors.fill: parent
-                                            anchors.margins: 3
+                                            anchors.leftMargin: 3
+                                            anchors.rightMargin: 3
                                             verticalAlignment: Text.AlignVCenter
                                             text: model.text
                                             font.pixelSize: 10
-                                            color: model.completed ? "#888" : "#333"
+                                            color: model.completed ? "#888888" : "#333333"
                                             font.strikeout: model.completed
-                                            onEditingFinished: todoModel.setProperty(index, "text", text)
+                                            selectByMouse: true
+                                            clip: true
+
+                                            onEditingFinished: {
+                                                todoModel.setProperty(index, "text", text)
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
 
+                        // 添加按钮（始终在列表最后）
                         Button {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 22
@@ -221,7 +241,12 @@ Window {
                                 border.width: 1
                             }
 
-                            onClicked: todoModel.append({ "text": "", "completed": false })
+                            onClicked: {
+                                todoModel.append({
+                                    "text": "",
+                                    "completed": false
+                                })
+                            }
                         }
                     }
                 }

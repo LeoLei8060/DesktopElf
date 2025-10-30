@@ -18,5 +18,6 @@
         <file>resources/images/jump/jump_02.svg</file>
         <file>resources/config/default_config.json</file>
         <file>resources/images/default.gif</file>
+        <file>src/qml/FitnessCalendar2.qml</file>
     </qresource>
 </RCC>

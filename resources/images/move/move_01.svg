@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="50" fill="#4a90e2" stroke="#2c5aa0" stroke-width="2"/>
+  
+  <!-- Face (slightly tilted for movement) -->
+  <ellipse cx="60" cy="60" rx="40" ry="38" fill="#87ceeb" stroke="#4a90e2" stroke-width="2" transform="rotate(-5 60 60)"/>
+  
+  <!-- Eyes (focused forward) -->
+  <circle cx="48" cy="50" r="4" fill="#333333"/>
+  <circle cx="72" cy="50" r="4" fill="#333333"/>
+  <circle cx="50" cy="49" r="1.5" fill="#ffffff"/>
+  <circle cx="74" cy="49" r="1.5" fill="#ffffff"/>
+  
+  <!-- Mouth (determined expression) -->
+  <path d="M 48 68 Q 60 72 72 68" stroke="#333333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Motion lines -->
+  <g stroke="#4a90e2" stroke-width="2" opacity="0.6">
+    <line x1="15" y1="40" x2="25" y2="40"/>
+    <line x1="15" y1="50" x2="30" y2="50"/>
+    <line x1="15" y1="60" x2="25" y2="60"/>
+  </g>
+  
+  <!-- Speed effect -->
+  <circle cx="60" cy="60" r="45" fill="none" stroke="#87ceeb" stroke-width="2" opacity="0.4" stroke-dasharray="5,5">
+    <animateTransform attributeName="transform" type="rotate" values="0 60 60;360 60 60" dur="1s" repeatCount="indefinite"/>
+  </circle>
+</svg>

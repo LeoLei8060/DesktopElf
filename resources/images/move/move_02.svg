@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="50" fill="#4a90e2" stroke="#2c5aa0" stroke-width="2"/>
+  
+  <!-- Face (neutral position) -->
+  <circle cx="60" cy="60" r="40" fill="#87ceeb" stroke="#4a90e2" stroke-width="2"/>
+  
+  <!-- Eyes (alert) -->
+  <circle cx="48" cy="50" r="4" fill="#333333"/>
+  <circle cx="72" cy="50" r="4" fill="#333333"/>
+  <circle cx="49" cy="48" r="1.5" fill="#ffffff"/>
+  <circle cx="73" cy="48" r="1.5" fill="#ffffff"/>
+  
+  <!-- Mouth (neutral) -->
+  <path d="M 50 70 Q 60 74 70 70" stroke="#333333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Motion lines -->
+  <g stroke="#4a90e2" stroke-width="2" opacity="0.6">
+    <line x1="10" y1="45" x2="20" y2="45"/>
+    <line x1="10" y1="55" x2="25" y2="55"/>
+    <line x1="10" y1="65" x2="20" y2="65"/>
+  </g>
+</svg>

@@ -1,0 +1,27 @@
+{
+    "sprite": {
+        "imagePath": "qrc:/images/default_sprite.png",
+        "moveAnimationPath": "qrc:/images/move/",
+        "jumpAnimationPath": "qrc:/images/jump/",
+        "position": {
+            "x": 100,
+            "y": 100
+        }
+    },
+    "appearance": {
+        "backgroundColor": "#00000000",
+        "opacity": 1.0,
+        "fontColor": "#333333",
+        "alwaysOnTop": true
+    },
+    "timer": {
+        "enabled": true,
+        "hourlyChime": true
+    },
+    "fitness": {
+        "dataPath": "fitness_data.json",
+        "reminderEnabled": true,
+        "dailyGoal": 3
+    },
+    "version": "1.0.0"
+}

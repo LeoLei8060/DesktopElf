@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>src/qml/main.qml</file>
+        <file>src/qml/ContextMenu.qml</file>
+        <file>src/qml/SettingsWindow.qml</file>
+        <file>src/qml/FitnessCalendar.qml</file>
+        <file>src/qml/CalendarCell.qml</file>
+        <file>resources/images/default_sprite.svg</file>
+        <file>resources/images/settings.svg</file>
+        <file>resources/images/fitness.svg</file>
+        <file>resources/images/move.svg</file>
+        <file>resources/images/animation.svg</file>
+        <file>resources/images/hide.svg</file>
+        <file>resources/images/exit.svg</file>
+        <file>resources/images/move/move_01.svg</file>
+        <file>resources/images/move/move_02.svg</file>
+        <file>resources/images/jump/jump_01.svg</file>
+        <file>resources/images/jump/jump_02.svg</file>
+        <file>resources/config/default_config.json</file>
+        <file>resources/images/default.gif</file>
+    </qresource>
+</RCC>

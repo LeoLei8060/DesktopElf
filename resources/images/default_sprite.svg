@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="50" fill="#4a90e2" stroke="#2c5aa0" stroke-width="2"/>
+  
+  <!-- Face -->
+  <circle cx="60" cy="60" r="40" fill="#87ceeb" stroke="#4a90e2" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <circle cx="48" cy="50" r="4" fill="#333333"/>
+  <circle cx="72" cy="50" r="4" fill="#333333"/>
+  <circle cx="49" cy="49" r="1.5" fill="#ffffff"/>
+  <circle cx="73" cy="49" r="1.5" fill="#ffffff"/>
+  
+  <!-- Mouth -->
+  <path d="M 45 70 Q 60 80 75 70" stroke="#333333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Cheeks -->
+  <circle cx="35" cy="65" r="6" fill="#ffb6c1" opacity="0.6"/>
+  <circle cx="85" cy="65" r="6" fill="#ffb6c1" opacity="0.6"/>
+  
+  <!-- Sparkles -->
+  <g fill="#ffd700" opacity="0.8">
+    <polygon points="25,25 27,30 32,30 28,33 30,38 25,35 20,38 22,33 18,30 23,30" transform="scale(0.6)"/>
+    <polygon points="95,35 97,40 102,40 98,43 100,48 95,45 90,48 92,43 88,40 93,40" transform="scale(0.5)"/>
+    <polygon points="100,80 102,85 107,85 103,88 105,93 100,90 95,93 97,88 93,85 98,85" transform="scale(0.4)"/>
+  </g>
+  
+  <!-- Animation hint (subtle glow) -->
+  <circle cx="60" cy="60" r="45" fill="none" stroke="#87ceeb" stroke-width="1" opacity="0.3">
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

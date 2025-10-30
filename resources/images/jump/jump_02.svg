@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle (stretched for jump) -->
+  <ellipse cx="60" cy="50" rx="50" ry="55" fill="#4a90e2" stroke="#2c5aa0" stroke-width="2"/>
+  
+  <!-- Face (stretched) -->
+  <ellipse cx="60" cy="50" rx="40" ry="45" fill="#87ceeb" stroke="#4a90e2" stroke-width="2"/>
+  
+  <!-- Eyes (excited) -->
+  <circle cx="48" cy="42" r="4" fill="#333333"/>
+  <circle cx="72" cy="42" r="4" fill="#333333"/>
+  <circle cx="49" cy="41" r="1.5" fill="#ffffff"/>
+  <circle cx="73" cy="41" r="1.5" fill="#ffffff"/>
+  
+  <!-- Mouth (happy) -->
+  <path d="M 45 62 Q 60 72 75 62" stroke="#333333" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Jump effect lines -->
+  <g stroke="#ffd700" stroke-width="2" opacity="0.8">
+    <line x1="40" y1="85" x2="45" y2="90"/>
+    <line x1="60" y1="85" x2="60" y2="95"/>
+    <line x1="80" y1="85" x2="75" y2="90"/>
+  </g>
+  
+  <!-- Sparkles -->
+  <g fill="#ffd700" opacity="0.8">
+    <polygon points="30,70 32,75 37,75 33,78 35,83 30,80 25,83 27,78 23,75 28,75" transform="scale(0.4)"/>
+    <polygon points="85,75 87,80 92,80 88,83 90,88 85,85 80,88 82,83 78,80 83,80" transform="scale(0.4)"/>
+  </g>
+</svg>
